@@ -1,5 +1,7 @@
 console.log("I am linked");
 
+
+//this is the unmodified version of the game, in the process of adding new stuff!
 let config = {
     type: Phaser.CANVAS,
     width: 640,
