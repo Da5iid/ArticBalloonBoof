@@ -7,18 +7,38 @@ class Play extends Phaser.Scene {
         // load images/tile sprites
         this.load.image('rocket', './assets/rocket.png');
         this.load.image('spaceship', './assets/spaceship.png');
+        this.load.image('balloon1', './assets/balloon1.png')
+        this.load.image('balloon2', './assets/balloon2.png')
+        this.load.image('balloon3', './assets/balloon3.png')
         this.load.image('starfield', './assets/starfield.png');
+        this.load.audio('bgm', ['./assets/drunkuke.wav']);
 
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
     }
 
     create() {
+        // background color
+        game.backgroundColor = "#00a5dc";
+        // background music
+        let music = this.sound.add("bgm", { loop: false, volume: 0.5 });
+        music.play();
+
+
+
         // place tile sprite
-        this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
+        //this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
 
         // green UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
+
+        // add rocket (p1) HAD TO ADD 12 TO THE y POS OR IT WOULD BE HIDDEN BY THE BORDER TF? why is no one else having this issue, the code isn't wrong.
+        this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - (borderUISize + 12), 'rocket').setOrigin(0.5, 0);
+
+        // add spaceships (x3)
+        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'balloon1', 0, 30).setOrigin(0, 0);
+        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'balloon2', 0, 20).setOrigin(0,0);
+        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'balloon3', 0, 10).setOrigin(0,0);
 
         // white borders
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
@@ -26,13 +46,6 @@ class Play extends Phaser.Scene {
         this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
 
-        // add rocket (p1) HAD TO ADD 12 TO THE y POS OR IT WOULD BE HIDDEN BY THE BORDER TF? why is no one else having this issue, the code isn't wrong.
-        this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - (borderUISize + 12), 'rocket').setOrigin(0.5, 0);
-
-        // add spaceships (x3)
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'spaceship', 0, 30).setOrigin(0, 0);
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'spaceship', 0, 20).setOrigin(0,0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'spaceship', 0, 10).setOrigin(0,0);
 
         // define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -70,7 +83,7 @@ class Play extends Phaser.Scene {
     
     // 60-second play clock timer
     scoreConfig.fixedWidth = 0;
-    this.clock = this.time.delayedCall(60000, () => {
+    this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
         this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart', scoreConfig).setOrigin(0.5);
         this.gameOver = true;
@@ -81,10 +94,11 @@ class Play extends Phaser.Scene {
     update() {
         // check key input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+            this.sound.get('bgm').stop();
             this.scene.restart();
         }
 
-        this.starfield.tilePositionX -= 4;
+        //this.starfield.tilePositionX -= 4;
 
         if (!this.gameOver) {               
             this.p1Rocket.update();         // update rocket sprite
@@ -126,6 +140,8 @@ class Play extends Phaser.Scene {
         // create explosion sprite at ship's position
         let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
         boom.anims.play('explode');             // play explode animation
+        this.sound.play('sfx_explosion', {volume: 0.5});
+
         boom.on('animationcomplete', () => {    // callback after anim completes
             ship.reset();                         // reset ship position
             ship.alpha = 1;                       // make ship visible again

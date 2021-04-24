@@ -6,6 +6,7 @@ let config = {
     type: Phaser.CANVAS,
     width: 640,
     height: 480,
+    backgroundColor: "#00a5dc",
     scene: [Menu, Play],
     parent: 'phaser_canvas',
 }
