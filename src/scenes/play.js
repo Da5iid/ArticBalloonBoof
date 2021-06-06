@@ -10,7 +10,9 @@ class Play extends Phaser.Scene {
         this.load.image('balloon1', './assets/balloon1.png')
         this.load.image('balloon2', './assets/balloon2.png')
         this.load.image('balloon3', './assets/balloon3.png')
-        this.load.image('starfield', './assets/starfield.png');
+        this.load.image('backgroundSky', './assets/skyloop.jpg');
+        this.load.image('radio', './assets/radio.png');
+        this.load.image('rocks', './assets/foreground.png');
         this.load.audio('bgm', ['./assets/drunkuke.wav']);
 
         // load spritesheet
@@ -27,10 +29,16 @@ class Play extends Phaser.Scene {
 
 
         // place tile sprite
-        //this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
+        this.backgroundSky = this.add.tileSprite(0, 0, 640, 480, 'backgroundSky').setOrigin(0, 0);
+
+        this.rocks = this.add.image(0, 0, 'rocks').setOrigin(0, 0);
+
+        this.radioTower = this.add.image(700, 0, 'radio').setOrigin(1, 0);
+        this.radioTower.scale = 0.7;
+        
 
         // green UI background
-        this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
+        //this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
 
         // add rocket (p1) HAD TO ADD 12 TO THE y POS OR IT WOULD BE HIDDEN BY THE BORDER TF? why is no one else having this issue, the code isn't wrong.
         this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - (borderUISize + 12), 'rocket').setOrigin(0.5, 0);
@@ -98,7 +106,7 @@ class Play extends Phaser.Scene {
             this.scene.restart();
         }
 
-        //this.starfield.tilePositionX -= 4;
+        this.backgroundSky.tilePositionX += 0.5;
 
         if (!this.gameOver) {               
             this.p1Rocket.update();         // update rocket sprite
