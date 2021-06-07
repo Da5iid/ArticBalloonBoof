@@ -9,9 +9,22 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx_explosion', './assets/pop.wav');
         this.load.audio('sfx_rocket', './assets/bonk.wav');
         this.load.audio('bgm', './assets/drunkuke.wav');
+        //load assets
+
+        this.load.image('backgroundSky', './assets/skyloop.jpg');
+        this.load.image('radio', './assets/radio.png');
+        this.load.image('rocks', './assets/foreground.png');
     }
 
     create() {
+
+      this.backgroundSky = this.add.tileSprite(0, 0, 640, 480, 'backgroundSky').setOrigin(0, 0);
+      this.rocks = this.add.tileSprite(0, 0, 640, 480, 'rocks').setOrigin(0, 0);
+
+      
+
+      this.radioTower = this.add.image(700, 0, 'radio').setOrigin(1, 0);
+      this.radioTower.scale = 0.7;
         // menu text
         let menuConfig = {
             fontFamily: 'Helvetica',
@@ -25,6 +38,10 @@ class Menu extends Phaser.Scene {
             },
             fixedWidth: 0
         }
+        this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
+        this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
+        this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
+        this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
         
         //show menu text
         this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'Artic Balloon Boof', menuConfig).setOrigin(0.5);
@@ -43,7 +60,8 @@ class Menu extends Phaser.Scene {
           // easy mode
           game.settings = {
             spaceshipSpeed: 3,
-            gameTimer: 60000    
+            gameTimer: 60000,
+            acid: false,  
           }
           this.sound.play('sfx_select');
           this.scene.start('playScene');    
@@ -51,8 +69,9 @@ class Menu extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
           // hard mode
           game.settings = {
-            spaceshipSpeed: 4,
-            gameTimer: 45000    
+            spaceshipSpeed: 5,
+            gameTimer: 45000,  
+            acid: true,
           }
           this.sound.play('sfx_select');
           this.scene.start('playScene');    

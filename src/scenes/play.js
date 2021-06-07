@@ -16,7 +16,7 @@ class Play extends Phaser.Scene {
         this.load.audio('bgm', ['./assets/drunkuke.wav']);
 
         // load spritesheet
-        this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
+        this.load.spritesheet('explosion', './assets/pop animation.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
     }
 
     create() {
@@ -29,13 +29,22 @@ class Play extends Phaser.Scene {
 
 
         // place tile sprite
-        this.backgroundSky = this.add.tileSprite(0, 0, 640, 480, 'backgroundSky').setOrigin(0, 0);
-        this.rocks = this.add.tileSprite(0, 0, 640, 480, 'rocks').setOrigin(0, 0);
+        // if (game.settings.acid == false) {
+        //     this.backgroundSky = this.add.tileSprite(0, 0, 640, 480, 'backgroundSky').setOrigin(0, 0);
+        //     this.rocks = this.add.tileSprite(0, 0, 640, 480, 'rocks').setOrigin(0, 0);
+        //     this.radioTower = this.add.image(700, 0, 'radio').setOrigin(1, 0);
+        //     this.radioTower.scale = 0.7;
+        // } else {
+            this.backgroundSky = this.add.tileSprite(0, 0, 640, 480, 'backgroundSky').setOrigin(0, 0);
+            this.rocks = this.add.tileSprite(0, 0, 640, 480, 'rocks').setOrigin(0, 0);
+            this.radioTower = this.add.image(700, 0, 'radio').setOrigin(1, 0);
+            this.radioTower.scale = 0.7;
 
+            this.backgroundSky.setTint(0xff00ff, 0xffff00, 0x0000ff, 0xff0000);
+            this.rocks.setTint(0xff00ff, 0xffff00, 0x0000ff, 0xff0000);
+            this.radioTower.setTint(0xff00ff, 0xffff00, 0x0000ff, 0xff0000);
+        //}
         
-
-        this.radioTower = this.add.image(700, 0, 'radio').setOrigin(1, 0);
-        this.radioTower.scale = 0.7;
         
 
         // green UI background
@@ -74,10 +83,10 @@ class Play extends Phaser.Scene {
 
           // display score
         let scoreConfig = {
-            fontFamily: 'Courier',
+            fontFamily: 'Helvetica',
             fontSize: '28px',
             backgroundColor: '#389fff',
-            color: '#843605',
+            color: '#000000',
             align: 'right',
             padding: {
             top: 5,
