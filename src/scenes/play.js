@@ -5,7 +5,7 @@ class Play extends Phaser.Scene {
 
     preload() {
         // load images/tile sprites
-        this.load.image('rocket', './assets/rocket.png');
+        this.load.image('rocket', './assets/dart.png');
         this.load.image('spaceship', './assets/spaceship.png');
         this.load.image('balloon1', './assets/balloon1.png')
         this.load.image('balloon2', './assets/balloon2.png')
@@ -30,8 +30,9 @@ class Play extends Phaser.Scene {
 
         // place tile sprite
         this.backgroundSky = this.add.tileSprite(0, 0, 640, 480, 'backgroundSky').setOrigin(0, 0);
+        this.rocks = this.add.tileSprite(0, 0, 640, 480, 'rocks').setOrigin(0, 0);
 
-        this.rocks = this.add.image(0, 0, 'rocks').setOrigin(0, 0);
+        
 
         this.radioTower = this.add.image(700, 0, 'radio').setOrigin(1, 0);
         this.radioTower.scale = 0.7;
@@ -41,7 +42,8 @@ class Play extends Phaser.Scene {
         //this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
 
         // add rocket (p1) HAD TO ADD 12 TO THE y POS OR IT WOULD BE HIDDEN BY THE BORDER TF? why is no one else having this issue, the code isn't wrong.
-        this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - (borderUISize + 12), 'rocket').setOrigin(0.5, 0);
+        this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - 85, 'rocket').setOrigin(0.5, 0);
+        this.p1Rocket.scale = 0.75;
 
         // add spaceships (x3)
         this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'balloon1', 0, 30).setOrigin(0, 0);
@@ -74,7 +76,7 @@ class Play extends Phaser.Scene {
         let scoreConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
-            backgroundColor: '#F3B141',
+            backgroundColor: '#389fff',
             color: '#843605',
             align: 'right',
             padding: {
@@ -106,7 +108,8 @@ class Play extends Phaser.Scene {
             this.scene.restart();
         }
 
-        this.backgroundSky.tilePositionX += 0.5;
+        this.backgroundSky.tilePositionX += 0.4;
+        this.rocks.tilePositionX += 0.7;
 
         if (!this.gameOver) {               
             this.p1Rocket.update();         // update rocket sprite
